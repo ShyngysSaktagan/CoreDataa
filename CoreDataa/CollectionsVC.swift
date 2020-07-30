@@ -59,7 +59,8 @@ extension CollectionsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let viewController : UIViewController!
         if indexPath.row == 0 {
-            viewController = SearchVC()
+            let wordService = WordServiceImpl()
+            viewController = SearchVC(viewModel: SearchViewModel(movieService: wordService))
         } else {
             viewController = FavoritesVC()
         }

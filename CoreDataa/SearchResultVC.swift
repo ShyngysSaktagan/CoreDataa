@@ -14,6 +14,7 @@ class SearchResultVC: UIViewController {
     private let descriptionLabel : UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 24)
+        label.numberOfLines = 0
         return label
     } ()
 
@@ -46,7 +47,7 @@ class SearchResultVC: UIViewController {
     }
     
     
-    func setDescription(text: String) {
+    func setDefinition(text: String) {
         descriptionLabel.text = text
     }
 }
