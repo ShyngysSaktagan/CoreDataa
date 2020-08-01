@@ -61,15 +61,20 @@ class FavoritesVC: UIViewController {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
             let delete = UIContextualAction(style: .normal, title: "Delete") {  (_, _, completion) in
                 let context = AppDelegate.persistentContainer.viewContext
-                let item = self.fetchedResultsController.object(at: indexPath)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-                context.delete(item)
-               
-                do {
-                    try context.save()
-                    completion(true)
-                } catch let error {
-                    print("Error \(error)")
+                if let sections = self.fetchedResultsController.sections, sections.count > 0 {
+                    if sections[0].numberOfObjects > 0 {
+                        let record = self.fetchedResultsController.object(at: indexPath) as NSManagedObject
+                        context.delete(record)
+                        do {
+                            try context.save()
+                        }
+                        catch {
+                            print ("There was an error")
+                        }
+    
+                        try? self.fetchedResultsController.performFetch()
+                        self.tableView.deleteRows(at: [indexPath], with: .left)
+                    }
                 }
            }
            

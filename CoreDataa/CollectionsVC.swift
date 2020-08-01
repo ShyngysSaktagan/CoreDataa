@@ -108,7 +108,7 @@ extension CollectionsVC: UITableViewDataSource {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 30))
         
         if (section == 1) {
-            headerView.backgroundColor = .clear
+            headerView.backgroundColor = .costomBackgroudColor
             headerView.addSubview(label)
             label.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview().inset(30)
