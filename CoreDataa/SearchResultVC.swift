@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 class SearchResultVC: UIViewController {
     
@@ -17,7 +18,9 @@ class SearchResultVC: UIViewController {
         label.numberOfLines = 0
         return label
     } ()
-
+    
+    private let titleLabel = UILabel()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,20 +38,59 @@ class SearchResultVC: UIViewController {
     
     @objc func addBookMark() {
         print("ehl")
+
+        let alert = UIAlertController(title: "Are you sure? ", message: "", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "YES", style: .default) { (action) in
+            let context     = AppDelegate.persistentContainer.viewContext
+            let word        = WordDefinition(context: context)
+            word.word       = self.titleLabel.text
+            word.definition = self.descriptionLabel.text
+//            if context.con
+//            if self.someEntityExists(self.descriptionLabel.text!) {
+            try? context.save()
+//            }
+        }
+        
+        let noAction = UIAlertAction(title: "NO", style: .cancel, handler: nil)
+    
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        
+        present(alert, animated: true, completion: nil)
     }
     
     
     func setupUI() {
-        view.backgroundColor = .white
         view.addSubview(descriptionLabel)
+        view.backgroundColor    = .white
+        title                   = titleLabel.text
         descriptionLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
     }
     
     
-    func setDefinition(text: String) {
-        descriptionLabel.text = text
+    func setDefinition(to word: String = "", text: String) {
+        titleLabel.text         = word
+        descriptionLabel.text   = text
     }
+    
+    
+//    func someEntityExists(_ definition: String) -> Bool {
+//        let fetchRequest = NSFetchRequest<WordDefinition>(entityName: "WordDefinition")
+//        fetchRequest.predicate = NSPredicate(format: "someField = %s", definition)
+//
+//        var entitiesCount = 0
+//
+//        do {
+//            entitiesCount = try AppDelegate.persistentContainer.viewContext.count(for: fetchRequest)
+//        }
+//        catch {
+//            print("error executing fetch request: \(error)")
+//        }
+//
+//        return entitiesCount > 0
+//    }
 }
 

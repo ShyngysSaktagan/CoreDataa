@@ -46,7 +46,7 @@ class SearchCell: UITableViewCell {
     
     
     func setupUI() {
-        addSubview(stackView)
+        contentView.addSubview(stackView)
         stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(16)
         }

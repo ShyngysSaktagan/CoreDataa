@@ -9,7 +9,19 @@
 import UIKit
 import SnapKit
 
+enum CollectionType {
+    case favorite
+    case history
+}
+
 class CollectionCell: UITableViewCell {
+    
+    private let mainView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 16
+        view.backgroundColor = .white
+        return view
+    }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -68,26 +80,32 @@ class CollectionCell: UITableViewCell {
     
     
     func setupUI() {
-        addSubview(mainStackView)
-                
-        iconImage.snp.makeConstraints { make in
-            make.height.width.equalTo(50)
+        contentView.addSubview(mainView)
+        mainView.addSubview(mainStackView)
+        
+        mainView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.bottom.equalToSuperview().inset(8)
+        }
+    
+        mainStackView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview().inset(16)
         }
         
-        mainStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(16)
+        iconImage.snp.makeConstraints { make in
+            make.height.width.equalTo(50)
         }
     }
     
     
-//    func configureType(data: CollectionType) {
-//        switch data {
-//        case .history:
-//            set(nameLabel: "История", recordCount: 0, iconImage: "")
-//        case .favorite:
-//            set(nameLabel: "Избранные", recordCount: 0, iconImage: "")
-//        }
-//    }
+    func configureType(data: CollectionType) {
+        switch data {
+        case .history:
+            set(nameLabel: "История", recordCount: 0, iconImage: "")
+        case .favorite:
+            set(nameLabel: "Избранные", recordCount: 0, iconImage: "")
+        }
+    }
     
     
     func set(nameLabel: String, recordCount: Int, iconImage: String) {
@@ -96,3 +114,4 @@ class CollectionCell: UITableViewCell {
         self.iconImage.image = UIImage(named: iconImage)
     }
 }
+
