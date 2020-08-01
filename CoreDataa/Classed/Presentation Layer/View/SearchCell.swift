@@ -12,24 +12,24 @@ import SnapKit
 class SearchCell: UITableViewCell {
     
     private let titleLabel : UILabel = {
-        let title = UILabel()
-        title.font = .systemFont(ofSize: 24)
+        let title               = UILabel()
+        title.font              = .systemFont(ofSize: 24)
         return title
     } ()
     
     private let descriptionLabel : UILabel = {
-        let description = UILabel()
-        description.font = .systemFont(ofSize: 16)
-        description.textColor = .gray
+        let description         = UILabel()
+        description.font        = .systemFont(ofSize: 16)
+        description.textColor   = .gray
         return description
     } ()
     
     lazy private var stackView : UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
-        stack.axis = .vertical
-        stack.spacing = 10
-        stack.distribution = .fill
-        stack.alignment = .fill
+        let stack               = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
+        stack.axis              = .vertical
+        stack.spacing           = 10
+        stack.alignment         = .fill
+        stack.distribution      = .fill
         return stack
     } ()
     
@@ -54,7 +54,7 @@ class SearchCell: UITableViewCell {
     
     
     func set(title: String, description: String) {
-        titleLabel.text = title
-        descriptionLabel.text = description
+        titleLabel.text         = title
+        descriptionLabel.text   = description
     }
 }

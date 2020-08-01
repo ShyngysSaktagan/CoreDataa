@@ -19,14 +19,12 @@ class CollectionsVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupUI()
     }
     
     
     func setupUI() {
         view.backgroundColor = .costomBackgroudColor
-        
         configureTitle()
         configureTableView()
     }
@@ -46,7 +44,6 @@ class CollectionsVC: UIViewController {
     
     func configureTitle() {
         title = "Коллекция"
-//        navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.navigationBar.prefersLargeTitles      = true
         navigationController?.navigationItem.largeTitleDisplayMode  = .never
         navigationController?.navigationBar.shadowImage             = nil
@@ -59,12 +56,17 @@ extension CollectionsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let viewController : UIViewController!
         if indexPath.section == 0 {
-            let wordService = WordServiceImpl()
-            let context     = AppDelegate.persistentContainer.viewContext
-            let viewModel   = SearchViewModel(movieService: wordService)
-            viewController  = SearchVC(context: context, viewModel: viewModel)
+            let context             = AppDelegate.persistentContainer.viewContext
+            let coreDataService     = CoreDataServiceImpl()
+            let wordService         = WordServiceImpl()
+            let historyViewModel    = HistoryViewModel(context: context, coreDataService: coreDataService)
+            let searchViewModel     = SearchViewModel(movieService: wordService)
+            viewController          = SearchVC(searchViewModel: searchViewModel, historyViewModel: historyViewModel)
         } else {
-            viewController  = FavoritesVC(context: AppDelegate.persistentContainer.viewContext)
+            let context             = AppDelegate.persistentContainer.viewContext
+            let coreDataService     = CoreDataServiceImpl()
+            let viewModel           = FavoritesViewModel(context: context, coreDataService: coreDataService)
+            viewController          = FavoritesVC(viewModel: viewModel)
         }
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -89,9 +91,9 @@ extension CollectionsVC: UITableViewDataSource {
         cell.selectionStyle = .none
         
         if indexPath.section == 0 {
-            cell.set(nameLabel: "История", recordCount: 1, iconImage: "")
+            cell.set(nameLabel: "История", recordCount: 1, iconImage: "octopus")
         }else {
-            cell.set(nameLabel: "Избранные", recordCount: 1, iconImage: "")
+            cell.set(nameLabel: "Избранные", recordCount: 1, iconImage: "starfish")
         }
         return cell
     }
@@ -99,9 +101,9 @@ extension CollectionsVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label : UILabel = {
-            let label = UILabel()
-            label.text = "Мои коллекции"
-            label.font = .systemFont(ofSize: 24)
+            let label   = UILabel()
+            label.text  = "Мои коллекции"
+            label.font  = .systemFont(ofSize: 24)
             return label
         } ()
         
@@ -117,16 +119,4 @@ extension CollectionsVC: UITableViewDataSource {
         }
         return headerView
     }
-    
-    
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        if (section == 1) { return "Мои коллекции" }
-//        return nil
-//    }
 }
-
-extension UIColor {
-    static let costomBackgroudColor = UIColor(red: 242 / 255, green: 241 / 255, blue: 246 / 255, alpha: 1)
-    static let lightRed             = UIColor(red: 247/255, green: 66/255, blue: 82/255, alpha: 1)
-}
-

@@ -16,6 +16,6 @@ extension History {
         return NSFetchRequest<History>(entityName: "History")
     }
 
-    @NSManaged public var wordDefinition: WordDefinition?
+    @NSManaged public var word: String?
 
 }

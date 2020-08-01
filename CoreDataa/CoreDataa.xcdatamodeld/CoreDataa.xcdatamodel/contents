@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="History" representedClassName="History" syncable="YES">
-        <relationship name="wordDefinition" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WordDefinition" inverseName="history" inverseEntity="WordDefinition"/>
+        <attribute name="word" optional="YES" attributeType="String"/>
     </entity>
     <entity name="WordDefinition" representedClassName="WordDefinition" syncable="YES">
         <attribute name="definition" optional="YES" attributeType="String"/>
         <attribute name="word" optional="YES" attributeType="String"/>
-        <relationship name="history" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="History" inverseName="wordDefinition" inverseEntity="History"/>
     </entity>
     <elements>
-        <element name="WordDefinition" positionX="-73.17578125" positionY="-907.73828125" width="128" height="88"/>
+        <element name="WordDefinition" positionX="-73.17578125" positionY="-907.73828125" width="128" height="73"/>
         <element name="History" positionX="164.1953125" positionY="-969.25" width="118.078125" height="58"/>
     </elements>
 </model>

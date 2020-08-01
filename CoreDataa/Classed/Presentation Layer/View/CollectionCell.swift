@@ -17,50 +17,48 @@ enum CollectionType {
 class CollectionCell: UITableViewCell {
     
     private let mainView: UIView = {
-        let view = UIView()
+        let view                = UIView()
+        view.backgroundColor    = .white
         view.layer.cornerRadius = 16
-        view.backgroundColor = .white
         return view
     }()
     
     private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        let label               = UILabel()
+        label.font              = .systemFont(ofSize: 20, weight: .semibold)
         return label
     }()
     
     private let recordingLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .regular)
+        let label               = UILabel()
+        label.font              = .systemFont(ofSize: 15, weight: .regular)
         label.textColor = .gray
         return label
     }()
     
     private let iconImage : UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = .black
-        imageView.layer.cornerRadius = 16
+        let imageView           = UIImageView()
         return imageView
     } ()
     
     private lazy var infoStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, recordingLabel])
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.spacing = 8
+        let stackView           = UIStackView(arrangedSubviews: [titleLabel, recordingLabel])
+        stackView.axis          = .vertical
+        stackView.spacing       = 8
+        stackView.alignment     = .fill
+        stackView.distribution  = .fill
         return stackView
     }()
     
     
     private lazy var mainStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [iconImage, infoStackView])
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.layer.cornerRadius = 16
-        stackView.backgroundColor = .green
-        stackView.spacing = 16
+        let stackView                   = UIStackView(arrangedSubviews: [iconImage, infoStackView])
+        stackView.axis                  = .horizontal
+        stackView.spacing               = 16
+        stackView.alignment             = .fill
+        stackView.distribution          = .fill
+        stackView.backgroundColor       = .green
+        stackView.layer.cornerRadius    = 16
         return stackView
     }()
     
@@ -109,9 +107,18 @@ class CollectionCell: UITableViewCell {
     
     
     func set(nameLabel: String, recordCount: Int, iconImage: String) {
-        self.titleLabel.text = nameLabel
-        self.recordingLabel.text = "\(recordCount) запись"
-        self.iconImage.image = UIImage(named: iconImage)
+        self.iconImage.image        = UIImage(named: iconImage)
+        self.titleLabel.text        = nameLabel
+        self.recordingLabel.text    = "\(recordCount) запись"
+    }
+    
+    
+    func set(recordCount: Int) {
+        if recordCount != 0 {
+            self.recordingLabel.text = "\(recordCount) запись"
+        }else {
+            self.recordingLabel.text = "Нет записей"
+        }
+        
     }
 }
-
