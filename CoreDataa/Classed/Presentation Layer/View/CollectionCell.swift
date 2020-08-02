@@ -57,8 +57,6 @@ class CollectionCell: UITableViewCell {
         stackView.spacing               = 16
         stackView.alignment             = .fill
         stackView.distribution          = .fill
-        stackView.backgroundColor       = .green
-        stackView.layer.cornerRadius    = 16
         return stackView
     }()
     
@@ -109,16 +107,17 @@ class CollectionCell: UITableViewCell {
     func set(nameLabel: String, recordCount: Int, iconImage: String) {
         self.iconImage.image        = UIImage(named: iconImage)
         self.titleLabel.text        = nameLabel
-        self.recordingLabel.text    = "\(recordCount) запись"
+        self.recordingLabel.text    = set(recordCount: recordCount)
     }
     
     
-    func set(recordCount: Int) {
-        if recordCount != 0 {
-            self.recordingLabel.text = "\(recordCount) запись"
-        }else {
-            self.recordingLabel.text = "Нет записей"
+    func set(recordCount: Int) -> String {
+        if recordCount == 1 {
+            return "\(recordCount) запись"
+        } else if recordCount > 1 {
+          return "\(recordCount) записи"
+        } else {
+            return "Нет записей"
         }
-        
     }
 }

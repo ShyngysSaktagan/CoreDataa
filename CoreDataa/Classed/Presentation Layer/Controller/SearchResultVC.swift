@@ -12,6 +12,8 @@ import CoreData
 
 class SearchResultVC: UIViewController {
     
+    private let titleLabel = UILabel()
+    private let viewModel: FavoritesViewModel
     private let descriptionLabel : UILabel = {
         let label           = UILabel()
         label.font          = .systemFont(ofSize: 24)
@@ -19,14 +21,28 @@ class SearchResultVC: UIViewController {
         return label
     } ()
     
-    private let titleLabel = UILabel()
     
-
+    init(viewModel: FavoritesViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
         configureBarButtonItem()
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     
@@ -37,20 +53,41 @@ class SearchResultVC: UIViewController {
     
     
     @objc func addBookMark() {
-        print("ehl")
-
-        let alert       = UIAlertController(title: "Are you sure? ", message: "", preferredStyle: .alert)
-        let noAction    = UIAlertAction(title: "NO", style: .cancel, handler: nil)
-        let yesAction   = UIAlertAction(title: "YES", style: .default) { (action) in
-            let context     = AppDelegate.persistentContainer.viewContext
-            let word        = WordDefinition(context: context)
+        let context     = AppDelegate.persistentContainer.viewContext
+        let word        = WordDefinition(context: context)
+        if !someEntityExists(definition: self.descriptionLabel.text!) {
+            let alert       = UIAlertController(title: "Success!", message: "You have successfully favorited this user 🎉", preferredStyle: .alert)
+            let hoorayButton    = UIAlertAction(title: "Hooray!", style: .default, handler: nil)
             word.word       = self.titleLabel.text
             word.definition = self.descriptionLabel.text
+            
+            alert.addAction(hoorayButton)
+            present(alert, animated: true, completion: nil)
             try? context.save()
+            try? self.viewModel.fetchedResultsController.performFetch()
+            
+        } else {
+            let alert = UIAlertController(title: "You've already favorited this user. You must REALLY like this Word! ⛑", message: "", preferredStyle: .alert)
+            let okButton    = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okButton)
+            present(alert, animated: true, completion: nil)
         }
-        alert.addAction(yesAction)
-        alert.addAction(noAction)
-        present(alert, animated: true, completion: nil)
+
+    }
+    
+    
+    func someEntityExists(definition: String) -> Bool {
+        var isContain = false
+        if let results = viewModel.fetchedResultsController.fetchedObjects {
+            for result in results {
+                let resultWord = result.definition?.lowercased()
+                if resultWord == definition.lowercased() {
+                    isContain = true
+                    break
+                }
+            }
+        }
+        return isContain
     }
     
     

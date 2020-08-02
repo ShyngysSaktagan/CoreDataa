@@ -55,6 +55,11 @@ class HistoryViewModel {
     }
     
     
+    func getCountOfDatas() -> Int {
+        coreDataService.getCountOfDatas(FRC: fetchedResultsController)
+    }
+    
+    
     func clearAll(FRC: NSFetchedResultsController<History>, tableView: UITableView) -> UIAlertController {
         let alert = UIAlertController(title: "Уверенсинба? ", message: "", preferredStyle: .alert)
         

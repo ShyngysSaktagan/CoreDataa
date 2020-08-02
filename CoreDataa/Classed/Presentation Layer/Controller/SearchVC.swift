@@ -42,9 +42,7 @@ class SearchVC: UIViewController {
     
     private let historyLabel : UILabel = {
         let label               = UILabel()
-        label.text              = "     Недавные истории"
-        label.textColor         = .label
-        label.font              = .systemFont(ofSize: 18)
+        label.text              = "                       "
         return label
     } ()
 
@@ -53,10 +51,18 @@ class SearchVC: UIViewController {
         let button = UIButton(type: .custom)
         button.setTitle("Очистить", for: .normal)
         button.setTitleColor(.gray, for: .normal)
-        button.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 170).isActive = true
         button.addTarget(self, action: #selector(clearAll), for: .touchUpInside)
         return button
     } ()
+    
+    
+    func setupUI() {
+          view.backgroundColor    = .white
+          title                   = "История"
+          configureSearchController()
+          configureTableView()
+    }
     
     
     @objc func clearAll() {
@@ -130,14 +136,6 @@ class SearchVC: UIViewController {
     }
      
     
-    func setupUI() {
-        view.backgroundColor    = .white
-        title                   = "История"
-        configureSearchController()
-        configureTableView()
-    }
-    
-    
     func configureTableView() {
         view.addSubview(tableView)
         tableView.separatorStyle    = .none
@@ -150,7 +148,8 @@ class SearchVC: UIViewController {
     
     func configureSearchController() {
         navigationItem.searchController                         = searchController
-        searchController.searchBar.placeholder                  = "Search"
+        navigationItem.hidesSearchBarWhenScrolling              = false
+        searchController.searchBar.placeholder                  = "Поиск"
         searchController.obscuresBackgroundDuringPresentation   = false
         searchController.searchBar.delegate                     = self
         definesPresentationContext                              = true
@@ -213,8 +212,11 @@ extension SearchVC :  UITableViewDelegate {
             isSearching = true
 
         } else {
-            let viewController = SearchResultVC()
-            let word = searchViewModel?.words[indexPath.row]
+            let context             = AppDelegate.persistentContainer.viewContext
+            let coreDataService     = CoreDataServiceImpl()
+            let viewModel           = FavoritesViewModel(context: context, coreDataService: coreDataService)
+            let viewController      = SearchResultVC(viewModel: viewModel)
+            let word                = searchViewModel?.words[indexPath.row]
             viewController.setDefinition(to: word!.word,text: word!.definition)
             navigationController?.pushViewController(viewController, animated: true)
         }

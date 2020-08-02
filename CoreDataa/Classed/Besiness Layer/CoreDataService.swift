@@ -14,10 +14,18 @@ protocol CoreDataService {
     func numberOfRowsInSection<T>(fetchedResultsController:NSFetchedResultsController<T>, section: Int) -> Int
     func titleForHeaderInSection<T>(fetchedResultsController:NSFetchedResultsController<T>, section: Int) -> String?
     func tableView<T>(FRC: NSFetchedResultsController<T>, tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    func getCountOfDatas<T>(FRC: NSFetchedResultsController<T>) -> Int
 }
 
 
 class CoreDataServiceImpl: CoreDataService {
+    func getCountOfDatas<T>(FRC: NSFetchedResultsController<T>) -> Int {
+        if let results = FRC.fetchedObjects {
+            return results.count
+        }
+        return 0
+    }
+    
     func titleForHeaderInSection<T>(fetchedResultsController: NSFetchedResultsController<T>, section: Int) -> String? {
         if let sections = fetchedResultsController.sections, sections.count > 0 {
             return sections[section].name

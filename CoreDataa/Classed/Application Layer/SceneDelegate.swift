@@ -16,7 +16,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene       = (scene as? UIWindowScene) else { return }
         let window                  = UIWindow(windowScene: windowScene)
-        let rootController          = UINavigationController(rootViewController: CollectionsVC())
+        let context                 = AppDelegate.persistentContainer.viewContext
+        let coreDataService         = CoreDataServiceImpl()
+        let historyViewModel         = HistoryViewModel(context: context, coreDataService: coreDataService)
+        let favoritesViewModel      = FavoritesViewModel(context: context, coreDataService: coreDataService)
+        let viewController          = CollectionsVC(historyViewModel: historyViewModel, favoritesViewModel: favoritesViewModel)
+        let rootController          = UINavigationController(rootViewController: viewController)
         window.rootViewController   = rootController
         self.window                 = window
         window.makeKeyAndVisible()

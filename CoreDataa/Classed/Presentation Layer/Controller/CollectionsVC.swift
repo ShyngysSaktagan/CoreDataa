@@ -11,15 +11,38 @@ import SnapKit
 
 class CollectionsVC: UIViewController {
     
+    private let historyViewModel : HistoryViewModel?
+    private let favoritesViewModel : FavoritesViewModel?
     private let tableView : UITableView = {
         let tableView = UITableView()
         tableView.separatorStyle = .none
         return tableView
     } ()
+    
+    
+    init(historyViewModel: HistoryViewModel, favoritesViewModel: FavoritesViewModel) {
+        self.historyViewModel   = historyViewModel
+        self.favoritesViewModel = favoritesViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        try? historyViewModel!.fetchedResultsController.performFetch()
+        try? favoritesViewModel!.fetchedResultsController.performFetch()
+        self.tableView.reloadData()
     }
     
     
@@ -87,13 +110,14 @@ extension CollectionsVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CollectionCell
         
-        cell.backgroundColor = .clear
-        cell.selectionStyle = .none
+        cell.backgroundColor    = .clear
+        cell.selectionStyle     = .none
+        cell.accessoryType      = .disclosureIndicator
         
         if indexPath.section == 0 {
-            cell.set(nameLabel: "История", recordCount: 1, iconImage: "octopus")
+            cell.set(nameLabel: "История", recordCount: historyViewModel?.getCountOfDatas() ?? 0, iconImage: "octopus")
         }else {
-            cell.set(nameLabel: "Избранные", recordCount: 1, iconImage: "starfish")
+            cell.set(nameLabel: "Избранные", recordCount: favoritesViewModel?.getCountOfDatas() ?? 0, iconImage: "starfish")
         }
         return cell
     }

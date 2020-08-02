@@ -33,10 +33,10 @@ class FavoritesVC: UIViewController {
     
     
     func setupUI() {
+        try? viewModel.fetchedResultsController.performFetch()
         configurView()
         configureTableView()
         configureNavigationItem()
-        try? viewModel.fetchedResultsController.performFetch()
     }
     
     
@@ -47,7 +47,7 @@ class FavoritesVC: UIViewController {
     
     
     func configureNavigationItem() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear all", style: .plain, target: self, action: #selector(clearAll))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Очистить", style: .plain, target: self, action: #selector(clearAll))
         navigationItem.searchController = self.searchController
     }
     
@@ -75,7 +75,13 @@ class FavoritesVC: UIViewController {
 
 extension FavoritesVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("hello")
+        let context             = AppDelegate.persistentContainer.viewContext
+        let coreDataService     = CoreDataServiceImpl()
+        let viewModel           = FavoritesViewModel(context: context, coreDataService: coreDataService)
+        let viewController      = SearchResultVC(viewModel: viewModel)
+        let word                = viewModel.fetchedResultsController.object(at: indexPath)
+        viewController.setDefinition(to: word.word ?? "",text: word.definition ?? "")
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

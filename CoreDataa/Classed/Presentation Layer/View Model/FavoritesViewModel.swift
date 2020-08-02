@@ -55,10 +55,15 @@ class FavoritesViewModel {
     }
     
     
+    func getCountOfDatas() -> Int {
+        coreDataService.getCountOfDatas(FRC: fetchedResultsController)
+    }
+    
+    
     func clearAll(FRC: NSFetchedResultsController<WordDefinition>, tableView: UITableView) -> UIAlertController {
-        let alert = UIAlertController(title: "Уверенсинба? ", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Уверенсынба? ", message: "", preferredStyle: .alert)
         
-        let yesAction = UIAlertAction(title: "Уверенмин", style: .default) { (action) in
+        let yesAction = UIAlertAction(title: "Уверенныймын 🤝", style: .default) { (action) in
             print("Uverennost 100%")
             let context = AppDelegate.persistentContainer.viewContext
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: WordDefinition.fetchRequest())
